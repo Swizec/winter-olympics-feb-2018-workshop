@@ -22,7 +22,7 @@ class Scatterplot extends Component {
     }
 
     render() {
-        const { x, y, height, width, xDomain, yDomain, data } = this.props;
+        const { x, y, height, xDomain, yDomain, data } = this.props;
 
         const marginLeft = 30,
             marginBottom = 20;
