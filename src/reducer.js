@@ -9,6 +9,12 @@ const defaultDataState = {
 };
 
 // data reducer
+const dataReducer = function(state = defaultDataState, action) {
+    switch (action.type) {
+        default:
+            return state;
+    }
+};
 
 const defaultMetaState = {
     loading: false,
@@ -18,8 +24,12 @@ const defaultMetaState = {
 };
 
 // meta reducer
-
-// all data loaded selector
+const metaReducer = function(state = defaultMetaState, action) {
+    switch (action.type) {
+        default:
+            return state;
+    }
+};
 
 // all medals selector
 export const allMedalsSelector = createSelector(
@@ -30,10 +40,20 @@ export const allMedalsSelector = createSelector(
 // medals current year selector
 
 // gdp selector
+export const gdpSelector = state => state.data.gdp;
 // max gdp
 
 // population
+export const populationSelector = state => state.data.population;
 // max population
+
+// all data loaded selector
+export const allDataLoadedSelector = createSelector(
+    allMedalsSelector,
+    gdpSelector,
+    populationSelector,
+    (medals, gdp, population) => medals && gdp && population
+);
 
 // min year
 // max year

@@ -7,6 +7,7 @@ import { min as d3Min, max as d3Max } from "d3";
 import styled from "styled-components";
 
 import OlympicsDashboard from "./OlympicsDashboard";
+import reducer, { allDataLoadedSelector } from "./reducer";
 
 const store = createStore(
     reducer,
@@ -15,17 +16,29 @@ const store = createStore(
 
 class App extends Component {
     componentDidMount() {
-        this.props.loadData();
+        //this.props.loadData();
     }
 
     render() {
         // error state
         // loading state
         // viz state
+        const { allDataLoaded } = this.props;
+
+        if (!allDataLoaded) {
+            return <h1>Loading ...</h1>;
+        } else {
+            return <h1>Got it</h1>;
+        }
     }
 }
 
-const ConnectedApp = connect(state => ({}), {})(App);
+const ConnectedApp = connect(
+    state => ({
+        allDataLoaded: allDataLoadedSelector(state)
+    }),
+    {}
+)(App);
 
 const Container = styled.div`
     padding: 25px;

@@ -6,8 +6,6 @@ const CaptionText = styled.text`
     font-weight: 400;
 `;
 
-const Caption = ({ x, y, children }) => (
-   
-);
+const Caption = ({ x, y, children }) => null;
 
 export default Caption;
