@@ -1,21 +1,41 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { Provider, connect } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import loggerMiddleware from "redux-logger";
+import thunkMiddleware from "redux-thunk";
+
+import reducer, { allDataLoaded } from "./reducer";
+import { loadData } from "./actions";
+
+const store = createStore(
+    reducer,
+    applyMiddleware(loggerMiddleware, thunkMiddleware)
+);
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    render() {
+        const { loading, allDataLoaded } = this.props;
+
+        if (loading || !allDataLoaded) {
+            return <h1>Loading data ...</h1>;
+        } else {
+            return <h1>Have it</h1>;
+        }
+    }
 }
 
-export default App;
+const ConnectedApp = connect(
+    state => ({
+        loading: state.data.loading,
+        allDataLoaded: allDataLoaded(state)
+    }),
+    {
+        loadData
+    }
+)(App);
+
+export default () => (
+    <Provider store={store}>
+        <ConnectedApp />
+    </Provider>
+);
