@@ -45,6 +45,11 @@ export const allDataLoaded = createSelector(
     (medals, population, gdp) => [medals, population, gdp].every(d => !!d)
 );
 
+export const medalsSelector = createSelector(
+    state => state.data.medals,
+    medals => medals || []
+);
+
 const rootReducer = combineReducers({
     data: dataReducer,
     meta: metaReducer
