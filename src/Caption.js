@@ -7,9 +7,7 @@ const CaptionText = styled.text`
 `;
 
 const Caption = ({ x, y, children }) => (
-    <CaptionText x={x} y={y}>
-        {children}
-    </CaptionText>
+   
 );
 
 export default Caption;
