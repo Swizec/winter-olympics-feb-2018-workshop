@@ -13,10 +13,16 @@ const store = createStore(
 );
 
 class App extends Component {
-    render() {
-        const { loading, allDataLoaded } = this.props;
+    componentDidMount() {
+        this.props.loadData();
+    }
 
-        if (loading || !allDataLoaded) {
+    render() {
+        const { loading, error, allDataLoaded } = this.props;
+
+        if (error) {
+            return <h1 style={{ color: "red" }}>{error}</h1>;
+        } else if (loading || !allDataLoaded) {
             return <h1>Loading data ...</h1>;
         } else {
             return <h1>Have it</h1>;
@@ -26,7 +32,8 @@ class App extends Component {
 
 const ConnectedApp = connect(
     state => ({
-        loading: state.data.loading,
+        loading: state.meta.loading,
+        error: state.meta.error,
         allDataLoaded: allDataLoaded(state)
     }),
     {
