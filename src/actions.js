@@ -18,7 +18,8 @@ export const loadData = function() {
                 discipline: d.Discipline,
                 medal: d.Medal,
                 sport: d.Sport,
-                gender: d.Gender
+                gender: d.Gender,
+                country: d.Country
             }),
             (error, data) => {
                 if (error) {
@@ -35,7 +36,8 @@ export const loadData = function() {
         d3Csv(
             "data/gdp.csv",
             d => ({
-                ISO: d.ISO,
+                country: d.ISO,
+                noc: d.NOC,
                 gdp: Number(d["GDP.2011"].replace(/\./g, ""))
             }),
             (error, data) => {
@@ -53,7 +55,8 @@ export const loadData = function() {
         d3Csv(
             "data/population.csv",
             d => ({
-                ISO: d.ISO,
+                country: d.ISO,
+                noc: d.NOC,
                 name: d["Country name"],
                 population: Number(d["pop.2010"].replace(/\./g, ""))
             }),

@@ -50,6 +50,34 @@ export const medalsSelector = createSelector(
     medals => medals || []
 );
 
+export const gdpSelector = createSelector(
+    state => state.data.gdp,
+    gdp => gdp || []
+);
+
+export const medalsPerCountrySelector = createSelector(
+    medalsSelector,
+    medals => {
+        let medalsPerCountry = {};
+        medals.forEach(medal => {
+            medalsPerCountry[medal.country] = [
+                ...(medalsPerCountry[medal.country] || []),
+                medal
+            ];
+        });
+        return medalsPerCountry;
+    }
+);
+
+export const countryGdp = (state, needle) => {
+    let val = gdpSelector(state).find(({ country }) => country === needle);
+    if (!val) {
+        val = gdpSelector(state).find(({ noc }) => noc === needle);
+    }
+
+    return val ? val.gdp : 0;
+};
+
 const rootReducer = combineReducers({
     data: dataReducer,
     meta: metaReducer
