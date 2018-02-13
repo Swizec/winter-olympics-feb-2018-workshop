@@ -81,12 +81,14 @@ export const startTimeTravel = function() {
             type: "START_TIME_TRAVEL"
         });
 
-        setInterval(() => {
+        let interval = setInterval(() => {
             const state = getState();
 
             if (state.meta.currentYear < maxYearSelector(state)) {
                 dispatch({ type: "NEXT_OLYMPICS" });
+            } else {
+                clearInterval(interval);
             }
-        }, 500);
+        }, 300);
     };
 };
