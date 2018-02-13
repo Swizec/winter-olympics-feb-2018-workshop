@@ -1,4 +1,5 @@
 import { csv as d3Csv } from "d3-request";
+import { minYearSelector, maxYearSelector, medalsSelector } from "./reducer";
 
 export const errorLoading = error => ({
     type: "ERROR",
@@ -71,5 +72,21 @@ export const loadData = function() {
                 });
             }
         );
+    };
+};
+
+export const startTimeTravel = function() {
+    return function(dispatch, getState) {
+        dispatch({
+            type: "START_TIME_TRAVEL"
+        });
+
+        setInterval(() => {
+            const state = getState();
+
+            if (state.meta.currentYear < maxYearSelector(state)) {
+                dispatch({ type: "NEXT_OLYMPICS" });
+            }
+        }, 500);
     };
 };

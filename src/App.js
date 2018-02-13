@@ -6,8 +6,13 @@ import thunkMiddleware from "redux-thunk";
 import { min as d3Min, max as d3Max } from "d3";
 import styled from "styled-components";
 
-import reducer, { allDataLoaded, medalsSelector } from "./reducer";
-import { loadData } from "./actions";
+import reducer, {
+    allDataLoaded,
+    medalsSelector,
+    maxYearSelector,
+    minYearSelector
+} from "./reducer";
+import { loadData, startTimeTravel } from "./actions";
 import OlympicsDashboard from "./OlympicsDashboard";
 
 const store = createStore(
@@ -21,7 +26,15 @@ class App extends Component {
     }
 
     render() {
-        const { loading, error, allDataLoaded, minYear, maxYear } = this.props;
+        const {
+            loading,
+            error,
+            allDataLoaded,
+            minYear,
+            maxYear,
+            currentYear,
+            startTimeTravel
+        } = this.props;
 
         if (error) {
             return <h1 style={{ color: "red" }}>{error}</h1>;
@@ -29,10 +42,15 @@ class App extends Component {
             return <h1>Loading data ...</h1>;
         } else {
             return (
-                <h1>
-                    Winter Olympics Medals {minYear} - {maxYear}
+                <div>
+                    <h1>
+                        Winter Olympics Medals{" "}
+                        {currentYear ? currentYear : `${minYear} - ${maxYear}`}
+                    </h1>
                     <OlympicsDashboard />
-                </h1>
+                    <br />
+                    <button onClick={startTimeTravel}>Time Travel</button>
+                </div>
             );
         }
     }
@@ -43,11 +61,13 @@ const ConnectedApp = connect(
         loading: state.meta.loading,
         error: state.meta.error,
         allDataLoaded: allDataLoaded(state),
-        minYear: d3Min(medalsSelector(state).map(({ year }) => year)),
-        maxYear: d3Max(medalsSelector(state).map(({ year }) => year))
+        minYear: minYearSelector(state),
+        maxYear: maxYearSelector(state),
+        currentYear: state.meta.currentYear
     }),
     {
-        loadData
+        loadData,
+        startTimeTravel
     }
 )(App);
 

@@ -46,7 +46,7 @@ const OlympicsDashboard = ({
     scatterplot2,
     maxPopulation
 }) => (
-    <svg width="1920" height="1080">
+    <svg width="1024" height="486">
         <Caption x={0} y={30}>
             Medals vs. GDP
         </Caption>

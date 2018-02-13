@@ -25,15 +25,42 @@ const dataReducer = (state = defaultDataState, action) => {
 
 const defaultMetaState = {
     loading: false,
-    error: null
+    error: null,
+    currentYear: null,
+    years: null
 };
 
 const metaReducer = (state = defaultMetaState, action) => {
     switch (action.type) {
         case "LOADING":
-            return { ...state, loading: true };
+            return {
+                ...state,
+                loading: true
+            };
         case "ERROR":
-            return { ...state, error: action.error };
+            return {
+                ...state,
+                error: action.error
+            };
+        case "START_TIME_TRAVEL":
+            return {
+                ...state,
+                currentYear: state.years[0],
+                yearIndex: 0
+            };
+        case "GOT_MEDALS":
+            return {
+                ...state,
+                years: [...new Set(action.data.map(d => d.year))].sort(
+                    (a, b) => a - b
+                )
+            };
+        case "NEXT_OLYMPICS":
+            return {
+                ...state,
+                currentYear: state.years[state.yearIndex + 1],
+                yearIndex: state.yearIndex + 1
+            };
         default:
             return state;
     }
@@ -46,10 +73,15 @@ export const allDataLoaded = createSelector(
     (medals, population, gdp) => [medals, population, gdp].every(d => !!d)
 );
 
-export const medalsSelector = createSelector(
+export const allMedalsSelector = createSelector(
     state => state.data.medals,
     medals => medals || []
 );
+
+export const medalsSelector = createSelector(state => {
+    const { data: { medals }, meta: { currentYear } } = state;
+    return currentYear ? medals.filter(d => d.year === currentYear) : medals;
+}, medals => medals || []);
 
 export const gdpSelector = createSelector(
     state => state.data.gdp,
@@ -67,6 +99,13 @@ export const populationSelector = createSelector(
 export const maxPopulationSelector = createSelector(
     populationSelector,
     population => d3.max(population, d => d.population)
+);
+
+export const minYearSelector = createSelector(allMedalsSelector, medals =>
+    d3.min(medals, d => d.year)
+);
+export const maxYearSelector = createSelector(allMedalsSelector, medals =>
+    d3.max(medals, d => d.year)
 );
 
 export const medalsPerCountrySelector = createSelector(
