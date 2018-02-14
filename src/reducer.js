@@ -72,8 +72,16 @@ export const allDataLoadedSelector = createSelector(
     (medals, gdp, population) => medals && gdp && population
 );
 
+export const yearsSelector = state => state.meta.years || [];
+
 // min year
+export const minYearSelector = createSelector(yearsSelector, years =>
+    d3.min(years)
+);
 // max year
+export const maxYearSelector = createSelector(yearsSelector, years =>
+    d3.max(years)
+);
 
 // medals per country
 

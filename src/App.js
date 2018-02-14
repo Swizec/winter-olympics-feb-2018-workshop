@@ -7,7 +7,11 @@ import { min as d3Min, max as d3Max } from "d3";
 import styled from "styled-components";
 
 import OlympicsDashboard from "./OlympicsDashboard";
-import reducer, { allDataLoadedSelector } from "./reducer";
+import reducer, {
+    allDataLoadedSelector,
+    minYearSelector,
+    maxYearSelector
+} from "./reducer";
 import { loadData } from "./actions";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -25,14 +29,18 @@ class App extends Component {
         // error state
         // loading state
         // viz state
-        const { allDataLoaded, error } = this.props;
+        const { allDataLoaded, error, minYear, maxYear } = this.props;
 
         if (error) {
             return <h1 style={{ color: "red" }}>{error}</h1>;
         } else if (!allDataLoaded) {
             return <h1>Loading ...</h1>;
         } else {
-            return <h1>Got it</h1>;
+            return (
+                <h1>
+                    Olympic Winter Medals {minYear} - {maxYear}
+                </h1>
+            );
         }
     }
 }
@@ -40,7 +48,9 @@ class App extends Component {
 const ConnectedApp = connect(
     state => ({
         allDataLoaded: allDataLoadedSelector(state),
-        error: state.meta.error
+        error: state.meta.error,
+        minYear: minYearSelector(state),
+        maxYear: maxYearSelector(state)
     }),
     {
         loadData
