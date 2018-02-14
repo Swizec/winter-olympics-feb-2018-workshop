@@ -37,9 +37,12 @@ class App extends Component {
             return <h1>Loading ...</h1>;
         } else {
             return (
-                <h1>
-                    Olympic Winter Medals {minYear} - {maxYear}
-                </h1>
+                <div>
+                    <h1>
+                        Olympic Winter Medals {minYear} - {maxYear}
+                    </h1>
+                    <OlympicsDashboard />
+                </div>
             );
         }
     }
