@@ -11,6 +11,8 @@ const defaultDataState = {
 // data reducer
 const dataReducer = function(state = defaultDataState, action) {
     switch (action.type) {
+        case "GOT_MEDALS":
+            return { ...state, medals: action.data };
         default:
             return state;
     }
@@ -26,6 +28,17 @@ const defaultMetaState = {
 // meta reducer
 const metaReducer = function(state = defaultMetaState, action) {
     switch (action.type) {
+        case "LOADING":
+            return { ...state, loading: true };
+        case "ERROR":
+            return { ...state, error: action.error };
+        case "GOT_MEDALS":
+            return {
+                ...state,
+                years: [...new Set(action.data.map(d => d.year))].sort(
+                    (a, b) => a - b
+                )
+            };
         default:
             return state;
     }

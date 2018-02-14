@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Provider, connect } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import loggerMiddleware from "redux-logger";
 import thunkMiddleware from "redux-thunk";
 import { min as d3Min, max as d3Max } from "d3";
@@ -8,24 +8,28 @@ import styled from "styled-components";
 
 import OlympicsDashboard from "./OlympicsDashboard";
 import reducer, { allDataLoadedSelector } from "./reducer";
+import { loadData } from "./actions";
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
     reducer,
-    applyMiddleware(loggerMiddleware, thunkMiddleware)
+    composeEnhancers(applyMiddleware(loggerMiddleware, thunkMiddleware))
 );
 
 class App extends Component {
     componentDidMount() {
-        //this.props.loadData();
+        this.props.loadData();
     }
 
     render() {
         // error state
         // loading state
         // viz state
-        const { allDataLoaded } = this.props;
+        const { allDataLoaded, error } = this.props;
 
-        if (!allDataLoaded) {
+        if (error) {
+            return <h1 style={{ color: "red" }}>{error}</h1>;
+        } else if (!allDataLoaded) {
             return <h1>Loading ...</h1>;
         } else {
             return <h1>Got it</h1>;
@@ -35,9 +39,12 @@ class App extends Component {
 
 const ConnectedApp = connect(
     state => ({
-        allDataLoaded: allDataLoadedSelector(state)
+        allDataLoaded: allDataLoadedSelector(state),
+        error: state.meta.error
     }),
-    {}
+    {
+        loadData
+    }
 )(App);
 
 const Container = styled.div`
