@@ -13,6 +13,10 @@ const dataReducer = function(state = defaultDataState, action) {
     switch (action.type) {
         case "GOT_MEDALS":
             return { ...state, medals: action.data };
+        case "GOT_POPULATION":
+            return { ...state, population: action.data };
+        case "GOT_GDP":
+            return { ...state, gdp: action.data };
         default:
             return state;
     }
