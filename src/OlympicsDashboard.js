@@ -16,6 +16,16 @@ const mapStateToProps = state => ({
                 country
             }))
             .filter(({ x }) => x > 0);
+    })(state),
+
+    scatterplot2: createSelector(medalsPerCountrySelector, medalsPerCountry => {
+        return Object.keys(medalsPerCountry)
+            .map(country => ({
+                x: countryPopulation(state, country),
+                y: medalsPerCountry[country].length,
+                country
+            }))
+            .filter(({ x }) => x > 0);
     })(state)
 });
 const mapDispatchToProps = {};

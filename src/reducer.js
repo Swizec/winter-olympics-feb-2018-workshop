@@ -111,7 +111,16 @@ export const countryGdp = (state, needle) => {
     return val ? val.gdp : 0;
 };
 
-// country population helper
+export const countryPopulation = (state, needle) => {
+    let val = populationSelector(state).find(
+        ({ country }) => country === needle
+    );
+    if (!val) {
+        val = populationSelector(state).find(({ noc }) => noc === needle);
+    }
+
+    return val ? val.population : 0;
+};
 
 const rootReducer = combineReducers({
     data: dataReducer,
